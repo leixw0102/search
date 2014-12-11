@@ -1,0 +1,54 @@
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <display-name>Archetype Created Web Application</display-name>
+    <!-- response content type -->
+    <context-param>
+        <param-name>response.content.type</param-name>
+        <param-value>application/json; charset=UTF-8</param-value>
+    </context-param>
+
+    <!-- http interface for elastic search create index   -->
+    <servlet>
+          <servlet-name>cms-import</servlet-name>
+          <servlet-class>tv.icntv.cms.index.ImportHttpServlet</servlet-class>
+    </servlet>
+      <servlet-mapping>
+          <servlet-name>cms-import</servlet-name>
+          <url-pattern>/index/import</url-pattern>
+      </servlet-mapping>
+    <!-- http interfact for elastic search create index mapping.-->
+      <servlet>
+          <servlet-name>cms-create</servlet-name>
+          <servlet-class>tv.icntv.cms.index.CreateHttpServlet</servlet-class>
+      </servlet>
+       <servlet-mapping>
+           <servlet-name>cms-create</servlet-name>
+           <url-pattern>/index/create</url-pattern>
+       </servlet-mapping>
+    <!-- delete index -->
+       <servlet>
+           <servlet-name>cms-delete</servlet-name>
+           <servlet-class>tv.icntv.cms.index.DeleteHttpServlet</servlet-class>
+       </servlet>
+        <servlet-mapping>
+            <servlet-name>cms-delete</servlet-name>
+            <url-pattern>/index/delete</url-pattern>
+        </servlet-mapping>
+        <!-- search  -->
+        <servlet>
+            <servlet-name>programseries-search</servlet-name>
+            <servlet-class>tv.icntv.cms.search.ProgramSeriesServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>programseries-search</servlet-name>
+            <url-pattern>/programSeries</url-pattern>
+        </servlet-mapping>
+        <servlet>
+            <servlet-name>tag-search</servlet-name>
+            <servlet-class>tv.icntv.cms.search.TagServlet</servlet-class>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>tag-search</servlet-name>
+            <url-pattern>/tag</url-pattern>
+        </servlet-mapping>
+
+</web-app>

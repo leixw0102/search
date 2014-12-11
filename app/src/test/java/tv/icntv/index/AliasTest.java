@@ -1,4 +1,4 @@
-/*
+package tv.icntv.index;/*
  * Copyright 2014 Future TV, Inc.
  *
  * The contents of this file are subject to the terms
@@ -16,22 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package tv.icntv.search.elastic;
-
-import org.elasticsearch.client.transport.TransportClient;
 
 /**
  * Created by leixw
  * <p/>
  * Author: leixw
- * Date: 2014/11/13
- * Time: 16:12
+ * Date: 2014/09/18
+ * Time: 11:13
  */
-public interface ISearch {
-    public TransportClient getESClient();
-    public String getAlias();
-    public String getIndex();
-    public String getType();
-    public void close(TransportClient client);
-    public boolean setAlias2Index(String alias,String index) throws Exception;
+public class AliasTest extends AbstractTest{
+    public  void testAlias(){
+
+    }
+
+    @Override
+    public void init() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void destory() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

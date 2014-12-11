@@ -32,7 +32,7 @@
 
 	<!-- Topic定义 -->
 	<bean id="notifyTopic" class="org.apache.activemq.command.ActiveMQTopic">
-		<constructor-arg value="yosmite.topic.search" />
+		<constructor-arg value="${jms.listen.topic}" />
 	</bean>
 
 	<!-- 异步接收Topic消息Container -->

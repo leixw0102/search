@@ -17,9 +17,12 @@ package tv.icntv.jms.search;/*
  * under the License.
  */
 
+import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
+import tv.icntv.search.domain.JmsData;
+import tv.icntv.search.domain.MsgStatus;
+import tv.icntv.search.domain.ProgramSeries;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -36,15 +39,31 @@ import javax.jms.TextMessage;
  */
 public class NotifyMessageProducer implements MessageListener {
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     public void onMessage(Message message) {
-        logger.info(".....");
-        try {
-            String msg=((TextMessage)message).getText();
-            logger.info(msg);
-        } catch (JMSException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+
+        if (message instanceof TextMessage) {
+            TextMessage msg = (TextMessage) message;
+
+            JmsData jmsData = null;
+            try {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("jms msg ={}", msg.getText());
+                }
+                jmsData = JSON.parseObject(msg.getText(), JmsData.class);
+            } catch (JMSException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+            boolean result = MsgStatus.valueOf(jmsData.getActive().toUpperCase()).operation(jmsData.getData());
+            logger.info(" jms received msg by TextMessage ,and msg active={},operation result = {}", jmsData.getActive(), result);
+
+
+        } else {
+            logger.error("error message type");
         }
+
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }

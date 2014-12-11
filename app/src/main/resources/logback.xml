@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
-	<property name="LOG_HOME" value="/data/icntv/" />
-	<property name="lOG_NAME" value="usre-center-api"></property>
+	<property name="LOG_HOME" value="/data/ysearch/app.log" />
+	<property name="lOG_NAME" value="cms-search-app"></property>
 	<!-- 控制台输出 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- 日志输出编码 -->
@@ -35,7 +35,12 @@
 		level="DEBUG" /> <logger name="org.hibernate.SQL" level="DEBUG" /> <logger 
 		name="org.hibernate.engine.QueryParameters" level="DEBUG" /> <logger name="org.hibernate.engine.query.HQLQueryPlan" 
 		level="DEBUG" /> -->
-
+	<logger name="o.h.event.def" level="error"></logger>
+	<logger name="org.hibernate" level="error"></logger>
+	<logger name="com.jolbox.bonecp.BoneCPDataSource" level="error"></logger>
+	<logger name="org.apache.zookeeper.ZooKeeper" level="error"></logger>
+	<logger name="org.apache.zookeeper.client.ZooKeeperSaslClient" level="error"></logger>
+	<logger name="org.apache.zookeeper.ClientCnxn" level="error"></logger>
 	<!-- 日志输出级别 -->
 	<root level="info">
 		<appender-ref ref="STDOUT" />

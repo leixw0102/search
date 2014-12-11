@@ -8,7 +8,7 @@
 
 	<description>JMS简单应用配置</description>
     <!--loader jms config -->
-    <context:property-placeholder location="classpath:jms.properties"></context:property-placeholder>
+    <context:property-placeholder location="classpath:jms1.properties"></context:property-placeholder>
 	<!-- ActiveMQ 连接工厂 -->
     <bean id="connectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" destroy-method="stop">
         <property name="connectionFactory" ref="innerJmsFactory" />
@@ -16,9 +16,9 @@
     </bean>
     <bean id="innerJmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
 		<property name="brokerURL" value="${jms.broker_url}" />
-        <property name="userName" value="${jms.userName}" />
-        <property name="password" value="${jms.pwd}" />
-        <property name="useCompression" value="${jms.compression}" />
+        <!--<property name="userName" value="${jms.userName}" />-->
+        <!--<property name="password" value="${jms.pwd}" />-->
+        <!--<property name="useCompression" value="${jms.compression}" />-->
 
 	</bean>
 
@@ -31,7 +31,7 @@
 
 	<!-- Topic定义 -->
 	<bean id="notifyTopic" class="org.apache.activemq.command.ActiveMQTopic">
-		<constructor-arg value="yosmite.topic.search" />
+		<constructor-arg value="abc" />
 	</bean>
 
 	<!-- Spring JMS Template -->

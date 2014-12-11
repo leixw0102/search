@@ -1,4 +1,4 @@
-/*
+package tv.icntv.search.domain;/*
  * Copyright 2014 Future TV, Inc.
  *
  * The contents of this file are subject to the terms
@@ -16,22 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package tv.icntv.search.elastic;
-
-import org.elasticsearch.client.transport.TransportClient;
 
 /**
  * Created by leixw
  * <p/>
  * Author: leixw
- * Date: 2014/11/13
- * Time: 16:12
+ * Date: 2014/12/11
+ * Time: 13:59
  */
-public interface ISearch {
-    public TransportClient getESClient();
-    public String getAlias();
-    public String getIndex();
-    public String getType();
-    public void close(TransportClient client);
-    public boolean setAlias2Index(String alias,String index) throws Exception;
+public class JmsData {
+    private String active;
+    private ProgramSeries data;
+
+    public ProgramSeries getData() {
+        return data;
+    }
+
+    public void setData(ProgramSeries data) {
+        this.data = data;
+    }
+
+    public String getActive() {
+        return active;
+    }
+
+    public void setActive(String active) {
+        this.active = active;
+    }
+
+    @Override
+    public String toString() {
+        return "JmsData{" +
+                "active='" + active + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

@@ -17,7 +17,15 @@
  * under the License.
  */
 
+import org.elasticsearch.client.FilterClient;
+import org.elasticsearch.client.IndicesAdminClient;
+import org.elasticsearch.client.Requests;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import tv.icntv.search.elastic.Search;
+import tv.icntv.search.index.Create;
+import tv.icntv.search.utils.ESJsonUtils;
+
+import java.io.IOException;
 
 /**
  * Created by leixw
@@ -27,7 +35,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Time: 14:37
  */
 public class Main {
-    public static void main(String [] args){
-         new ClassPathXmlApplicationContext("applicationContext-jms.xml");
+    public static void main(String[] args) throws IOException {
+        Search search = new Search();
+        IndicesAdminClient action = search.getESClient().admin().indices();
+        if (!action.exists(Requests.indicesExistsRequest(search.getIndex())).actionGet().isExists()) {
+            action.prepareCreate(search.getIndex()).execute().actionGet();
+            //create mapping
+            action.putMapping(Requests.putMappingRequest(search.getIndex()).type(search.getType()).source(ESJsonUtils.getMapping(search.getType()))).actionGet();
+            search.setAlias2Index(search.getAlias(), search.getIndex());
+        }
+        new ClassPathXmlApplicationContext("applicationContext-jms.xml");
+//        System.out.println(Create.getCreateMapping());
+
     }
 }
