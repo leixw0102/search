@@ -17,34 +17,16 @@ package tv.icntv.search.elastic;/*
  * under the License.
  */
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import org.apache.lucene.index.Term;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
-import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequestBuilder;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesResponse;
-import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.index.query.BoolFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilterBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.Aggregation;
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import tv.icntv.search.domain.ProgramSeries;
-import tv.icntv.search.domain.TagSource;
-import tv.icntv.search.index.Create;
-import tv.icntv.search.utils.ESJsonUtils;
 import tv.icntv.search.utils.PropertiesLoaderUtils;
 
 import java.io.IOException;
@@ -70,7 +52,7 @@ public class Search implements ISearch, Config {
     }
 
     @Override
-    public TransportClient getESClient() {
+    public synchronized TransportClient getESClient() {
         List<InetSocketTransportAddress> list = getInetSocket();
         if(null == list || list.isEmpty()){
             return null;
@@ -108,7 +90,7 @@ public class Search implements ISearch, Config {
     }
 
     @Override
-    public void close(TransportClient client) {
+    public synchronized void close(TransportClient client) {
         client.close();
 
     }

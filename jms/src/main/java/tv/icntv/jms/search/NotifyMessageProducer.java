@@ -49,7 +49,7 @@ public class NotifyMessageProducer implements MessageListener {
             JmsData jmsData = null;
             try {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("jms msg ={}", msg.getText());
+                    logger.info("jms msg ={}", msg.getText());
                 }
                 jmsData = JSON.parseObject(msg.getText(), JmsData.class);
             } catch (JMSException e) {
@@ -63,7 +63,5 @@ public class NotifyMessageProducer implements MessageListener {
         } else {
             logger.error("error message type");
         }
-
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -17,6 +17,7 @@ package tv.icntv.search.utils;/*
  * under the License.
  */
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -123,45 +124,40 @@ public class ESJsonUtils {
 
     public static XContentBuilder getIndexJson(ProgramSeries programSeries) throws IOException {
         XContentBuilder jsonBuild = XContentFactory.jsonBuilder().prettyPrint();
-        jsonBuild.startObject()
-                .field(Constant.PROGRAM_SERIES_ID,programSeries.getId()) //节目集ID
-                .field(Constant.PROGRAM_SERIES_NAME,programSeries.getProgramSeriesName())//节目名称
-                .field(Constant.PROGRAM_SERIES_EN_NAME,programSeries.getProgramSeriesEnName())     //节目EN名称
-                .field(Constant.PROGRAM_SERIES_HEADER,programSeries.getProgramHeader()) //首字母
-                .field(Constant.PLATFORM_CODE,programSeries.getPlatformName())
-                .field(Constant.REGION_CODE,programSeries.getCopyRightZone())
-                .field(Constant.POSTER,programSeries.getPosterAddr())
-                .field(Constant.SMALL_POSTER_ADDR,programSeries.getSmallPosterAddr())
-                .field(Constant.BIG_POSTER_ADDR,programSeries.getBigPosterAddr())
-                .field(Constant.IS_3D,programSeries.getIs3d())
-                .field(Constant.TIME_LENGTH,programSeries.getProgramLength())
-                .field(Constant.IS_CUSTOMER,programSeries.getCustomer())
-                .field(Constant.STAR_RATION,programSeries.getGrade())
-                .field(Constant.ZONE,programSeries.getZone())
+        jsonBuild.startObject();
+        jsonBuild.field(Constant.PROGRAM_SERIES_ID,programSeries.getId()); //节目集ID
+        jsonBuild.field(Constant.PROGRAM_SERIES_NAME,programSeries.getProgramSeriesName());//节目名称
+        jsonBuild.field(Constant.PROGRAM_SERIES_EN_NAME,programSeries.getProgramSeriesEnName());     //节目EN名称
+        jsonBuild.field(Constant.PROGRAM_SERIES_HEADER, programSeries.getProgramHeader()); //首字母
+        jsonBuild.field(Constant.PLATFORM_CODE, programSeries.getPlatformName());
+        jsonBuild.field(Constant.REGION_CODE, programSeries.getCopyRightZone());
+        jsonBuild.field(Constant.POSTER, programSeries.getPosterAddr());
+        jsonBuild.field(Constant.SMALL_POSTER_ADDR, programSeries.getSmallPosterAddr());
+        jsonBuild.field(Constant.BIG_POSTER_ADDR, programSeries.getBigPosterAddr());
+        jsonBuild.field(Constant.IS_3D, programSeries.getIs3d());
+        jsonBuild.field(Constant.TIME_LENGTH, programSeries.getProgramLength());
+        jsonBuild.field(Constant.IS_CUSTOMER, programSeries.getCustomer());
+        jsonBuild .field(Constant.STAR_RATION, programSeries.getGrade());
+        jsonBuild.field(Constant.ZONE, programSeries.getZone());
 //                .field(Constant.CP_PRODUCER,programSeries.get)
-                .field(Constant.PROGRAM_SERIES_DESC,programSeries.getProgramSeriesDesc())
-                .startObject("tag_arr");
+        jsonBuild.field(Constant.PROGRAM_SERIES_DESC, programSeries.getProgramSeriesDesc());
+        jsonBuild.startObject("tag_arr");
         setTagSource(programSeries.getTags(),jsonBuild);
         jsonBuild.endObject()
-
-//                    for(TagSource source : tagSources){
-//                        jsonBuild.startObject(Constant.TAG_NAME,source.get)
-//                    }
-//                   .endArray()
-//                .endObject()
                 .endObject();
         return jsonBuild;
     }
 
     private static String secondary_tag="secondary_tag";
     private static void setTagSource(TagSource[] tagSource ,XContentBuilder jsonBuilder ) throws IOException {
+        jsonBuilder.startArray("primary_tag");
         for(TagSource source : tagSource){
 
                     if(source.getTagLevel()==3){
 //                       jsonBuilder.startArray("tertiary_tag").startObject();
 
                     } else {
-                       jsonBuilder.startArray("primary_tag");
+
                        jsonBuilder.startObject();
                         jsonBuilder.field(Constant.TAG_NAME,source.getTagName());
                         jsonBuilder.startArray(secondary_tag);
@@ -169,9 +165,10 @@ public class ESJsonUtils {
                         for(TagSource child:source.getChildTagSource()){
                             jsonBuilder.startObject().field(Constant.TAG_NAME, child.getTagName()).endObject();
                         }
-                        jsonBuilder.endArray().endObject().endArray();
+                        jsonBuilder.endArray().endObject();
                     }
         }
+        jsonBuilder.endArray() ;
     }
 
     public static void main(String[]args) throws IOException {
@@ -202,8 +199,9 @@ public class ESJsonUtils {
         child2.setId(3);
         child2.setTagLevel(2);
         child2.setTagName("test2");
-        tagSource.setChildTagSource(new TagSource[]{child1,child2});
+        tagSource.setChildTagSource(new TagSource[]{child1, child2});
         p.setTags(new TagSource[]{tagSource});
-        System.out.println(getIndexJson(p));
+        System.out.println(JSON.toJSONString(p,true));
+        System.out.println(getIndexJson(p).string());
     }
 }

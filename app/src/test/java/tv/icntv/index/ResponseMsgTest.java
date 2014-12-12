@@ -17,18 +17,14 @@ package tv.icntv.index;/*
  * under the License.
  */
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tv.icntv.cms.response.Response;
-import tv.icntv.cms.response.SearchMsg;
-import tv.icntv.cms.response.searchvo.CornerMark;
-import tv.icntv.cms.response.searchvo.Tag;
 import tv.icntv.cms.response.searchvo.ProgramSeries;
+import tv.icntv.cms.response.searchvo.Tag;
 
 import java.util.List;
 

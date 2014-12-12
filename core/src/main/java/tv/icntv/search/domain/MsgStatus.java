@@ -17,6 +17,7 @@ package tv.icntv.search.domain;/*
  * under the License.
  */
 
+import com.alibaba.fastjson.JSON;
 import tv.icntv.search.elastic.Index;
 
 /**
@@ -30,7 +31,6 @@ public enum  MsgStatus {
     ONLINE {
         @Override
         public boolean operation(ProgramSeries programSeries) {
-
             return index.createIndex(programSeries);  //To change body of implemented methods use File | Settings | File Templates.
         }
     }, OFFLINE {

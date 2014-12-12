@@ -17,12 +17,18 @@ package tv.icntv.test;/*
  * under the License.
  */
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
+import tv.icntv.search.domain.ProgramSeries;
+import tv.icntv.search.domain.TagSource;
 import tv.icntv.search.elastic.Search;
 import tv.icntv.search.utils.ESJsonUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -34,6 +40,10 @@ import java.io.IOException;
  */
 public class Create {
     public static void main(String[]args) throws IOException {
+        String json = Files.toString(new File("d:\\db.txt"), Charsets.UTF_8);
+        ProgramSeries programSeries = JSON.parseObject(json,ProgramSeries.class);
+        System.out.println(JSON.toJSONString(programSeries,true));
+        System.out.println(ESJsonUtils.getIndexJson(programSeries).string());
 //        ProgramSeries p = new ProgramSeries();
 //        p.setBigPosterAddr("abc");
 //        p.setCopyRightZone(new String[]{"a", "b"});
@@ -63,17 +73,18 @@ public class Create {
 //        child2.setTagName("爱情");
 //        tagSource.setChildTagSource(new TagSource[]{child1,child2});
 //        p.setTags(new TagSource[]{tagSource});
-//        System.out.println(ESJsonUtils.getIndexJson(p));
-        Search search = new Search();
-        TransportClient client = search.getESClient();
-//        client.admin().indices().delete(Requests.deleteIndexRequest("cms_v1")).actionGet();
-//        client.prepareDelete().(Requests.deleteRequest("cms_v1")).actionGet();
-//        Requests.indexRequest("abc").type("d").source(Create.getCreateMapping());
-        client.admin().indices().prepareCreate(search.getIndex()).execute().actionGet();
-//        System.out.println(ESJsonUtils.getMapping());
-        PutMappingRequest put = Requests.putMappingRequest(search.getIndex()).type(search.getType()).source(ESJsonUtils.getMapping(search.getType()));
-        client.admin().indices().putMapping(put).actionGet();
-        System.out.println(search.setAlias2Index(search.getAlias(),search.getIndex()));
+//        System.out.println(JSON.toJSONString(p,true));
+//        System.out.println(ESJsonUtils.getIndexJson(p).string());
+//        Search search = new Search();
+//        TransportClient client = search.getESClient();
+////        client.admin().indices().delete(Requests.deleteIndexRequest("cms_v1")).actionGet();
+////        client.prepareDelete().(Requests.deleteRequest("cms_v1")).actionGet();
+////        Requests.indexRequest("abc").type("d").source(Create.getCreateMapping());
+//        client.admin().indices().prepareCreate(search.getIndex()).execute().actionGet();
+////        System.out.println(ESJsonUtils.getMapping());
+//        PutMappingRequest put = Requests.putMappingRequest(search.getIndex()).type(search.getType()).source(ESJsonUtils.getMapping(search.getType()));
+//        client.admin().indices().putMapping(put).actionGet();
+//        System.out.println(search.setAlias2Index(search.getAlias(),search.getIndex()));
 //        IndexResponse response =  client.prepareIndex("cms_v1", "item",p.getId()+"").setSource(ESJsonUtils.getIndexJson(p)).execute().actionGet();
 //        System.out.println(response.isCreated());
 //        client.delete(Requests.deleteRequest("cms_v1").type("item").id("4"));
@@ -119,6 +130,6 @@ public class Create {
 //        }
 
 
-        client.close();
+//        client.close();
     }
 }

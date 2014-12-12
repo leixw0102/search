@@ -20,6 +20,7 @@
 import org.elasticsearch.client.FilterClient;
 import org.elasticsearch.client.IndicesAdminClient;
 import org.elasticsearch.client.Requests;
+import org.elasticsearch.client.transport.TransportClient;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import tv.icntv.search.elastic.Search;
 import tv.icntv.search.index.Create;
@@ -37,15 +38,14 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         Search search = new Search();
-        IndicesAdminClient action = search.getESClient().admin().indices();
+        TransportClient client = search.getESClient();
+        IndicesAdminClient action =  client.admin().indices();
         if (!action.exists(Requests.indicesExistsRequest(search.getIndex())).actionGet().isExists()) {
             action.prepareCreate(search.getIndex()).execute().actionGet();
-            //create mapping
             action.putMapping(Requests.putMappingRequest(search.getIndex()).type(search.getType()).source(ESJsonUtils.getMapping(search.getType()))).actionGet();
             search.setAlias2Index(search.getAlias(), search.getIndex());
         }
+        search.close(client);
         new ClassPathXmlApplicationContext("applicationContext-jms.xml");
-//        System.out.println(Create.getCreateMapping());
-
     }
 }
