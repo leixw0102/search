@@ -53,7 +53,6 @@ public class Pinyin4jUtils {
 //        int t0 = t1.length;
 //        try {
 //            for (int i = 0; i < t0; i++) {
-//                // 判断是否为汉字字符
 //                if (java.lang.Character.toString(t1[i]).matches(
 //                        "[\\u4E00-\\u9FA5]+")) {
 //                    t2 = PinyinHelper.toHanyuPinyinStringArray(t1[i], t3);

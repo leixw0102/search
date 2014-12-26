@@ -39,10 +39,10 @@ public class Program {
     private String alias;
     private int setNumber;
     private Date premiereDate;
-    private String posterUrl;//默认海报
-    private String materialClass;//题材t
-    private String definitionCode;//清晰度
-    private int originalRateId;//原始码率
+    private String posterUrl;
+    private String materialClass;
+    private String definitionCode;
+    private int originalRateId;
     private String years;
     private String englishName;
 

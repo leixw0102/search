@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
+import org.elasticsearch.index.query.BoolFilterBuilder;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -57,11 +58,12 @@ public class ProgramSeriesServlet extends AbstractSearchHttpServlet {
 
 
     @Override
-    protected FilterBuilder builderQuery() {
-        if ("1".equals(type)) {
+    protected BoolFilterBuilder builderQuery() {
+        logger.info("q={}",q);
+        if (1==type) {
             return FilterBuilders.boolFilter().must(FilterBuilders.prefixFilter("program_series_header", q));
         }
-        if ("2".equals(type)) {
+        if (2==type) {
             return FilterBuilders.boolFilter().must(FilterBuilders.prefixFilter("artist.par_pinyin", q));
         }
         return null;
@@ -73,6 +75,7 @@ public class ProgramSeriesServlet extends AbstractSearchHttpServlet {
         List result = Lists.newArrayList();
         for (SearchHit hit : hits.getHits()) {
             try {
+//                System.out.println(hit.sourceAsString());
                 ProgramSeries series = JSON.parseObject(hit.sourceAsString(), ProgramSeries.class);
                 result.add(series);
             } catch (Exception e) {

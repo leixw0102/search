@@ -43,7 +43,7 @@ import java.util.List;
 public  class SearchMsg {
 
      public static void main(String[]args){
-         Search search = new Search();
+         Search search =  Search.getInstance();
          TransportClient client = search.getESClient();
          BoolFilterBuilder bFilter= FilterBuilders.boolFilter().
                  must(FilterBuilders.termFilter("region_code","a")).

@@ -62,7 +62,7 @@ public abstract class AbstractHttpServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         // 获取配置文件参数
-        search = new Search();
+        search = Search.getInstance();
         alias =search.getAlias();
         type = search.getType();
         //获取xml中response返回的header信息   json

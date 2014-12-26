@@ -42,8 +42,11 @@ import java.util.Properties;
  */
 public class Search implements ISearch, Config {
     Properties properties = null;
+    public static Search getInstance(){
+       return new Search();
+    }
 
-    public Search() {
+    private Search() {
         try {
             properties = PropertiesLoaderUtils.loadAllProperties("elasticsearch-conf.properties");
         } catch (IOException e) {
@@ -52,7 +55,7 @@ public class Search implements ISearch, Config {
     }
 
     @Override
-    public synchronized TransportClient getESClient() {
+    public  TransportClient getESClient() {
         List<InetSocketTransportAddress> list = getInetSocket();
         if(null == list || list.isEmpty()){
             return null;
@@ -90,7 +93,7 @@ public class Search implements ISearch, Config {
     }
 
     @Override
-    public synchronized void close(TransportClient client) {
+    public  void close(TransportClient client) {
         client.close();
 
     }

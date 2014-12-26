@@ -36,4 +36,7 @@ public class AliasTest extends tv.icntv.test.AbstractTest{
     public void destory() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+    public static void main(String[]args){
+        System.out.println(10/3);
+    }
 }

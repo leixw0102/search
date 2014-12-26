@@ -66,57 +66,58 @@ public class ESJsonUtils {
         XContentBuilder xBuilder = XContentFactory.jsonBuilder().prettyPrint()
                 .startObject()
 //                    .startObject("mapping")
-                    .startObject(type)
-                        .startObject("properties")
-                            .startObject(Constant.PROGRAM_SERIES_ID).field("type", "long").field("store", "true").endObject()
-                            .startObject(Constant.PROGRAM_SERIES_NAME).field("type", "string").field("indexAnalyzer", "ik").field("searchAnalyzer", "ik").endObject()
-                            .startObject(Constant.PROGRAM_SERIES_EN_NAME).field("type", "string").endObject()
-                            .startObject(Constant.PROGRAM_SERIES_HEADER).field("type", "string").endObject()
-                            .startObject(Constant.PLATFORM_CODE).field("type", "string").endObject()
-                            .startObject(Constant.REGION_CODE).field("type", "string").endObject() //版权区域
-                            .startObject(Constant.sendJmsDate).field("type","date").field("format","yyyy-MM-dd HH:mm:ss").field("index", "not_analyzed").endObject()
-                            .startObject(Constant.YEAR).field("type","string").endObject()
-                            .startObject(Constant.POSTER).field("type", "string").endObject()
-                            .startObject(Constant.SMALL_POSTER_ADDR).field("type", "string").endObject()
-                            .startObject(Constant.BIG_POSTER_ADDR).field("type", "string").endObject()
-                            .startObject(Constant.IS_3D).field("type", "integer").endObject()
-                            .startObject(Constant.TIME_LENGTH).field("type", "integer").endObject()
-                            .startObject(Constant.IS_CUSTOMER).field("type", "integer").endObject()
-                            .startObject(Constant.STAR_RATION).field("type", "float").endObject() //评分
-                            .startObject(Constant.ZONE).field("type", "string").endObject()   //地区
+                .startObject(type)
+                .startObject("properties")
+                .startObject(Constant.PROGRAM_SERIES_ID).field("type", "long").field("store", "true").endObject()
+                .startObject(Constant.PROGRAM_SERIES_NAME).field("type", "string").field("indexAnalyzer", "ik").field("searchAnalyzer", "ik").endObject()
+                .startObject(Constant.PROGRAM_SERIES_EN_NAME).field("type", "string").endObject()
+                .startObject(Constant.PROGRAM_SERIES_HEADER).field("type", "string").endObject()
+                .startObject(Constant.PLATFORM_CODE).field("type", "string").endObject()
+                .startObject(Constant.REGION_CODE).field("type", "string").endObject() //版权区域
+                .startObject(Constant.sendJmsDate).field("type","date").field("format","yyyy-MM-dd HH:mm:ss").field("index", "not_analyzed").endObject()
+                .startObject(Constant.YEAR).field("type","string").endObject()
+                .startObject(Constant.POSTER).field("type", "string").endObject()
+                .startObject(Constant.SMALL_POSTER_ADDR).field("type", "string").endObject()
+                .startObject(Constant.BIG_POSTER_ADDR).field("type", "string").endObject()
+                .startObject(Constant.IS_3D).field("type", "integer").endObject()
+                .startObject(Constant.TIME_LENGTH).field("type", "integer").endObject()
+                .startObject(Constant.IS_CUSTOMER).field("type", "integer").endObject()
+                .startObject(Constant.STAR_RATION).field("type", "float").endObject() //评分
+                .startObject(Constant.ZONE).field("type", "string").endObject()   //地区
 //                            .startObject(Constant.CP_PRODUCER).field("type", "string").endObject()
-                            .startObject(Constant.PROGRAM_SERIES_DESC).field("type", "string").field("indexAnalyzer", "ik").field("searchAnalyzer", "ik").endObject()
-        //                            .startObject("tag_arr")
-                            .startObject("tag_arr")
-                                .startObject("properties")
-                                    .startObject("primary_tag")
-                                        .startObject("properties")
-                                            .startObject(Constant.TAG_NAME).field("type", "string").field("index", "not_analyzed").endObject()
-                                            .startObject("secondary_tag")
-                                                .startObject("properties")
-                                                    .startObject(Constant.TAG_NAME).field("type", "string").field("index", "not_analyzed").endObject()
-                                                .endObject()
-                                            .endObject()
-                                        .endObject()
-                                    .endObject()
-                                    .startObject("tertiary_tag")
-                                        .startObject("properties")
-                                            .startObject(Constant.TAG_NAME).field("type", "string").field("index", "not_analyzed").endObject()
-                                        .endObject()
-                                    .endObject()
-                                .endObject()
-                            .endObject()
-        //                            //                .endObject()
-                            .startObject("artist")
-                                .startObject("properties")
-                                    .startObject(Constant.ARTIST_ID).field("type", "long").endObject()
-                                    .startObject(Constant.PAR_NAME).field("type", "string").field("indexAnalyzer", "ik").field("searchAnalyzer", "ik").endObject()
-                                    .startObject(Constant.PAR_PINYIN).field("type", "string").endObject()
-                                    .startObject(Constant.TASK).field("type", "integer").endObject()
-                                .endObject()
-                            .endObject()
-                        .endObject()
-                    .endObject()
+                .startObject(Constant.PROGRAM_SERIES_DESC).field("type", "string").field("indexAnalyzer", "ik").field("searchAnalyzer", "ik").endObject()
+                        //                            .startObject("tag_arr")
+                .startObject("tag_arr")
+                .startObject("properties")
+                .startObject("primary_tag")
+                .startObject("properties")
+                .startObject(Constant.TAG_NAME).field("type", "string").field("index", "not_analyzed").endObject()
+                .startObject("secondary_tag")
+                .startObject("properties")
+                .startObject(Constant.TAG_NAME).field("type", "string").field("index", "not_analyzed").endObject()
+                .startObject("primary_secondary_tag").field("type", "string").field("index", "not_analyzed").endObject()
+                .endObject()
+                .endObject()
+                .endObject()
+                .endObject()
+                .startObject("tertiary_tag")
+                .startObject("properties")
+                .startObject(Constant.TAG_NAME).field("type", "string").field("index", "not_analyzed").endObject()
+                .endObject()
+                .endObject()
+                .endObject()
+                .endObject()
+                        //                            //                .endObject()
+                .startObject("artist")
+                .startObject("properties")
+                .startObject(Constant.ARTIST_ID).field("type", "long").endObject()
+                .startObject(Constant.PAR_NAME).field("type", "string").field("indexAnalyzer", "ik").field("searchAnalyzer", "ik").endObject()
+                .startObject(Constant.PAR_PINYIN).field("type", "string").endObject()
+                .startObject(Constant.TASK).field("type", "integer").endObject()
+                .endObject()
+                .endObject()
+                .endObject()
+                .endObject()
 //                    .endObject()
                 .endObject();
         return xBuilder.string();
@@ -153,20 +154,21 @@ public class ESJsonUtils {
         jsonBuilder.startArray("primary_tag");
         for(TagSource source : tagSource){
 
-                    if(source.getTagLevel()==3){
+            if(source.getTagLevel()==3){
 //                       jsonBuilder.startArray("tertiary_tag").startObject();
 
-                    } else {
+            } else {
 
-                       jsonBuilder.startObject();
-                        jsonBuilder.field(Constant.TAG_NAME,source.getTagName());
-                        jsonBuilder.startArray(secondary_tag);
+                jsonBuilder.startObject();
+                jsonBuilder.field(Constant.TAG_NAME,source.getTagName());
+                jsonBuilder.startArray(secondary_tag);
 
-                        for(TagSource child:source.getChildTagSource()){
-                            jsonBuilder.startObject().field(Constant.TAG_NAME, child.getTagName()).endObject();
-                        }
-                        jsonBuilder.endArray().endObject();
-                    }
+                for(TagSource child:source.getChildTagSource()){
+                    jsonBuilder.startObject().field(Constant.TAG_NAME, child.getTagName());
+                    jsonBuilder.field("primary_secondary_tag",source.getTagName()+"-"+child.getTagName()).endObject();
+                }
+                jsonBuilder.endArray().endObject();
+            }
         }
         jsonBuilder.endArray() ;
     }

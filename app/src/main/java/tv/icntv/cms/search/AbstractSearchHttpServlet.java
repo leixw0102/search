@@ -40,6 +40,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ import java.util.List;
  */
 public abstract class AbstractSearchHttpServlet extends AbstractHttpServlet {
     protected String platformId = "b";
-    protected int region = 1;
+    protected String region ="";
     protected int pageNo = 0;
     protected int limit = 1;
     private String primary_tag = "";
@@ -61,22 +62,29 @@ public abstract class AbstractSearchHttpServlet extends AbstractHttpServlet {
     protected void fillParameter(HttpServletRequest request) {
 
         platformId = Preconditions.checkNotNull(request.getParameter("platformId"), "platformId null");
-        region = Ints.tryParse(Preconditions.checkNotNull(request.getParameter("region"), "region null"));
+        region = Preconditions.checkNotNull(request.getParameter("region"), "region null");
         pageNo = Ints.tryParse(Preconditions.checkNotNull(request.getParameter("pageNo"), "pageNo position null "));
         String limitTemp = Preconditions.checkNotNull(request.getParameter("limit"), "result limit null ");
         if (!Strings.isNullOrEmpty(limitTemp)) {
             limit = Ints.tryParse(limitTemp);
         }
         primary_tag = Preconditions.checkNotNull(request.getParameter("primaryTag"), "primary tag null");
+//        try {
+//            primary_tag = new String(primary_tag.getBytes("iso-8859-1"),"utf-8");
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//        }
         secondary_tag = request.getParameter("secondaryTag");
+        logger.info("platformId ={},region={},pageNo={},limit ={},primary_tag={},secondary_tag={}",platformId,region,pageNo,limit,primary_tag,secondary_tag);
     }
 
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        super.service(req, resp);
         try {
             fillParameter(req);
         } catch (Exception e) {
+            e.printStackTrace();
             output(JSON.toJSONString(Response.ILLEGAL_PARAMETER_MSG), resp);
             return;
         }
@@ -89,12 +97,18 @@ public abstract class AbstractSearchHttpServlet extends AbstractHttpServlet {
 
         Response result = null;
         try {
-            SearchResponse response = builder.setFrom(pageNo * limit).setSize(limit).execute().actionGet();
+            SearchResponse response = builder.setFrom((pageNo-1) * limit).setSize(limit).execute().actionGet();
             //set commons
             SearchHits hits = response.getHits();
             long total = hits.getTotalHits();
-            if (total <= 0) {
+            if (total <= 0 ) {
                 output(JSON.toJSONString(new Response("result null", 2)), resp);
+                return;
+            }
+
+            long totalPage = total % limit == 0 ? total / limit :(total / limit +1);
+            if(totalPage <pageNo){
+                output(JSON.toJSONString(new Response("pageNo error",2)),resp);
                 return;
             }
             Msg msg = setResultCommon(total);
@@ -122,9 +136,11 @@ public abstract class AbstractSearchHttpServlet extends AbstractHttpServlet {
             List<Tag> secondaries=Lists.newArrayList();
             for(Terms.Bucket b :secondary.getBuckets()){
                 Tag secondary_tag = new Tag();
-                secondary_tag.setName(b.getKey());
-                secondary_tag.setCount(b.getDocCount());
-                secondaries.add(secondary_tag);
+                if(b.getKey().startsWith(primary.getName())){
+                    secondary_tag.setName(b.getKey().replace(primary.getName()+"-",""));
+                    secondary_tag.setCount(b.getDocCount());
+                    secondaries.add(secondary_tag);
+                }
             }
             primary.setSecondary_tag(secondaries);
             tags.add(primary);
@@ -140,7 +156,7 @@ public abstract class AbstractSearchHttpServlet extends AbstractHttpServlet {
     protected abstract FilterBuilder builderQuery();
 
     protected  AggregationBuilder builderAggregation(){
-        return AggregationBuilders.terms(agg_primary_name).field("tag_arr.primary_tag.tag_name").subAggregation(AggregationBuilders.terms(agg_secondary_name).field("tag_arr.primary_tag.secondary_tag.tag_name"));
+        return AggregationBuilders.terms(agg_primary_name).field("tag_arr.primary_tag.tag_name").subAggregation(AggregationBuilders.terms(agg_secondary_name).field("tag_arr.primary_tag.secondary_tag.primary_secondary_tag"));
     };
 
     protected Msg setResultCommon(long total) {
@@ -161,21 +177,19 @@ public abstract class AbstractSearchHttpServlet extends AbstractHttpServlet {
                 .must(FilterBuilders.boolFilter().must(FilterBuilders.termFilter("tag_arr.primary_tag.tag_name", primary_tag)));
 
         if (!Strings.isNullOrEmpty(secondary_tag)) {
-            bFilter.must(FilterBuilders.boolFilter().must(FilterBuilders.termFilter("tag_arr.primary_tag.secondary_tag.tag_name", secondary_tag)));
+//            try {
+//                secondary_tag = new String(secondary_tag.getBytes("iso-8859-1"),"utf-8");
+//            } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//            }
+            bFilter.must(FilterBuilders.boolFilter().must(FilterBuilders.termFilter("tag_arr.primary_tag.secondary_tag.primary_secondary_tag", primary_tag+"-"+secondary_tag)));
         }
         FilterBuilder filterBuilder = builderQuery();
         if (null != filterBuilder) {
-            bFilter.must(builderQuery());
-        }
-        return client.prepareSearch(alias).setTypes(type).setPostFilter(bFilter);
-    }
 
-//    protected void setGroupAggretationResult(Terms terms){
-//        System.out.println(terms.getBuckets().size());
-//        for(Terms.Bucket b: terms.getBuckets()){
-//            System.out.println(b.getKey());
-//            primary_tags.add(new Tag((int)b.getDocCount(),b.getKey()));
-//        }
-//    }
+            bFilter.must(filterBuilder);
+        }
+        return client.prepareSearch(alias).setTypes(type).setQuery(bFilter.buildAsBytes());
+    }
 
 }

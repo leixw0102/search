@@ -36,7 +36,7 @@ import java.io.IOException;
  */
 public class Index {
 
-    Search search  = new Search();;
+    Search search  = Search.getInstance();;
 
     TransportClient client = search.getESClient();;
     public  boolean createIndex(ProgramSeries programSeries){
